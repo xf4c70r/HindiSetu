@@ -21,6 +21,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from django.http import HttpResponse
 from api import views
+import logging
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -46,7 +47,11 @@ def api_root(request):
     })
 
 def healthz(request):
-    return HttpResponse("OK", status=200)
+    try:
+        return HttpResponse("OK", status=200)
+    except Exception as e:
+        logging.exception("Healthz endpoint failed")
+        return HttpResponse("ERROR", status=500)
 
 urlpatterns = [
     path('', api_root, name='api-root'),
