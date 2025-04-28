@@ -7,7 +7,6 @@ import {
   Card,
   CardContent,
   Grid,
-  Paper
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
