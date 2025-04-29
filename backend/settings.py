@@ -91,12 +91,12 @@ WSGI_APPLICATION = 'wsgi.application'
 
 # Database
 # We're using MongoDB for data storage but need Django's auth tables
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # MongoDB settings
 MONGODB_URI = os.getenv('MONGODB_URI', 'mongodb://localhost:27017/')
@@ -181,7 +181,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # React frontend in development
-    "https://hindisetufrontend.onrender.com",  # React frontend in production
+    "https://hindisetu-4nib.onrender.com",  # New frontend domain
 ]
 CORS_ALLOW_METHODS = [
     'DELETE',
