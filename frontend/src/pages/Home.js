@@ -201,10 +201,14 @@ const Home = () => {
   useEffect(() => {
     const fetchTrendingWords = async () => {
       try {
-        const words = await getTrendingWords();
-        setTrendingWords(words);
+        setLoading(true);
+        const response = await getTrendingWords();
+        // Ensure we have an array of words with required properties
+        const validWords = Array.isArray(response) ? response : [];
+        setTrendingWords(validWords);
       } catch (error) {
         console.error('Error fetching trending words:', error);
+        setTrendingWords([]); // Set empty array on error
       } finally {
         setLoading(false);
       }
@@ -216,20 +220,30 @@ const Home = () => {
   }, [user]);
 
   const createAnimationSequence = (words) => {
+    // Check if words is an array and not empty
+    if (!Array.isArray(words) || words.length === 0) {
+      return ['No trending words available', 2000];
+    }
+
     const sequence = [];
     words.forEach((word, index) => {
-      sequence.push(word.word);
-      sequence.push(1000);
-      sequence.push(' → ');
-      sequence.push(500);
-      sequence.push(`${word.word} → ${word.meaning}`);
-      sequence.push(2000);
-      if (index < words.length - 1) {
-        sequence.push('');
+      // Check if word object has required properties
+      if (word && typeof word === 'object' && word.word && word.meaning) {
+        sequence.push(word.word);
+        sequence.push(1000);
+        sequence.push(' → ');
         sequence.push(500);
+        sequence.push(`${word.word} → ${word.meaning}`);
+        sequence.push(2000);
+        if (index < words.length - 1) {
+          sequence.push('');
+          sequence.push(500);
+        }
       }
     });
-    return sequence;
+
+    // Return default sequence if no valid words were processed
+    return sequence.length > 0 ? sequence : ['No trending words available', 2000];
   };
 
   if (user) {
