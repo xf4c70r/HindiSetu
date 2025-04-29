@@ -26,9 +26,9 @@ const authService = {
       return validatedData;
     } catch (error) {
       if (error.response?.status === 401) {
-        throw { message: 'Invalid email or password' };
+        throw new Error('Invalid email or password');
       }
-      throw error.response?.data || { message: 'An error occurred during login' };
+      throw new Error(error.response?.data?.message || 'An error occurred during login');
     }
   },
 
@@ -44,9 +44,9 @@ const authService = {
       return validatedData;
     } catch (error) {
       if (error.response?.status === 400) {
-        throw { message: 'Email already exists or invalid data provided' };
+        throw new Error('Email already exists or invalid data provided');
       }
-      throw error.response?.data || { message: 'An error occurred during signup' };
+      throw new Error(error.response?.data?.message || 'An error occurred during signup');
     }
   },
 
