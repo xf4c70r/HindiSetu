@@ -181,7 +181,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # React frontend in development
-    "https://hindisetu-4nib.onrender.com",  # New frontend domain
+    "https://hindisetu.onrender.com",  # New frontend domain
 ]
 CORS_ALLOW_METHODS = [
     'DELETE',
