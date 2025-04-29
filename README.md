@@ -5,9 +5,12 @@ A web application that automatically generates Hindi questions and answers from 
 ## Features
 
 - 🎥 YouTube video transcript extraction
+- 🔤 Automatic Hindi-to-English translation
 - 🤖 AI-powered question generation
+- 📚 Smart vocabulary list generation
+- 📖 Interactive glossary creation
+- 💾 Transcript and learning material storage
 - 👥 User authentication and management
-- 💾 Transcript and Q&A storage
 - ⚡ Real-time processing
 - 📱 Responsive web interface
 
@@ -117,6 +120,8 @@ python manage.py process_youtube_videos --playlist-url "YOUR_PLAYLIST_URL" --use
 - `GET /api/transcripts/{id}/` - Get specific transcript
 - `DELETE /api/transcripts/{id}/` - Delete transcript
 - `POST /api/transcripts/{id}/toggle_favorite/` - Toggle favorite status
+- `POST /api/transcripts/{id}/glossary/` - Generate glossary
+- `GET /api/transcripts/{id}/vocabulary/` - Get vocabulary list
 
 ### Authentication
 - `POST /api/auth/login/` - User login
