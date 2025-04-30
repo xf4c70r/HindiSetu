@@ -226,7 +226,7 @@ const Home = () => {
     }
 
     const sequence = [];
-    words.forEach((word, index) => {
+    words.forEach((word) => {
       // Check if word object has required properties
       if (word && typeof word === 'object' && word.word && word.meaning) {
         sequence.push(word.word);

@@ -1,15 +1,5 @@
 import api from './axiosConfig';
 
-const validateAuthResponse = (data) => {
-  if (!data.access || !data.refresh || !data.user) {
-    throw new Error('Invalid response from server: missing authentication data');
-  }
-  if (data.access === 'undefined' || data.refresh === 'undefined') {
-    throw new Error('Invalid authentication tokens received from server');
-  }
-  return data;
-};
-
 const authService = {
   login: async (email, password) => {
     try {
@@ -18,17 +8,14 @@ const authService = {
         password,
       });
       
-      const validatedData = validateAuthResponse(response.data);
-      localStorage.setItem('accessToken', validatedData.access);
-      localStorage.setItem('refreshToken', validatedData.refresh);
-      localStorage.setItem('userInfo', JSON.stringify(validatedData.user));
+      const { access, refresh, user } = response.data;
+      localStorage.setItem('accessToken', access);
+      localStorage.setItem('refreshToken', refresh);
+      localStorage.setItem('userInfo', JSON.stringify(user));
       
-      return validatedData;
+      return response.data;
     } catch (error) {
-      if (error.response?.status === 401) {
-        throw new Error('Invalid email or password');
-      }
-      throw new Error(error.response?.data?.message || 'An error occurred during login');
+      throw error.response?.data || { message: 'An error occurred during login' };
     }
   },
 
@@ -36,24 +23,21 @@ const authService = {
     try {
       const response = await api.post('/auth/signup/', userData);
       
-      const validatedData = validateAuthResponse(response.data);
-      localStorage.setItem('accessToken', validatedData.access);
-      localStorage.setItem('refreshToken', validatedData.refresh);
-      localStorage.setItem('userInfo', JSON.stringify(validatedData.user));
+      const { access, refresh, user } = response.data;
+      localStorage.setItem('accessToken', access);
+      localStorage.setItem('refreshToken', refresh);
+      localStorage.setItem('userInfo', JSON.stringify(user));
       
-      return validatedData;
+      return response.data;
     } catch (error) {
-      if (error.response?.status === 400) {
-        throw new Error('Email already exists or invalid data provided');
-      }
-      throw new Error(error.response?.data?.message || 'An error occurred during signup');
+      throw error.response?.data || { message: 'An error occurred during signup' };
     }
   },
 
   logout: async () => {
     try {
       const refreshToken = localStorage.getItem('refreshToken');
-      if (refreshToken && refreshToken !== 'undefined') {
+      if (refreshToken) {
         await api.post('/auth/logout/', { refresh: refreshToken });
       }
     } catch (error) {
@@ -68,26 +52,11 @@ const authService = {
 
   getCurrentUser: () => {
     const userInfo = localStorage.getItem('userInfo');
-    if (!userInfo || userInfo === 'undefined') {
-      return null;
-    }
-    try {
-      return JSON.parse(userInfo);
-    } catch {
-      localStorage.removeItem('userInfo');
-      return null;
-    }
+    return userInfo ? JSON.parse(userInfo) : null;
   },
 
   isAuthenticated: () => {
-    const accessToken = localStorage.getItem('accessToken');
-    const refreshToken = localStorage.getItem('refreshToken');
-    return (
-      !!accessToken && 
-      !!refreshToken && 
-      accessToken !== 'undefined' && 
-      refreshToken !== 'undefined'
-    );
+    return !!localStorage.getItem('accessToken') && !!localStorage.getItem('refreshToken');
   }
 };
 

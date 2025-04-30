@@ -14,37 +14,17 @@ export const AuthProvider = ({ children }) => {
     const refreshToken = localStorage.getItem('refreshToken');
     const userInfo = localStorage.getItem('userInfo');
     
-    if (accessToken && refreshToken && userInfo && 
-        accessToken !== 'undefined' && refreshToken !== 'undefined' && userInfo !== 'undefined') {
-      try {
-        const parsedUserInfo = JSON.parse(userInfo);
-        setUser({
-          accessToken,
-          refreshToken,
-          ...parsedUserInfo
-        });
-      } catch (error) {
-        console.error('Error parsing user info:', error);
-        // Clear invalid data
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('userInfo');
-      }
-    } else {
-      // Clear any invalid data
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('userInfo');
+    if (accessToken && refreshToken && userInfo) {
+      setUser({
+        accessToken,
+        refreshToken,
+        ...JSON.parse(userInfo)
+      });
     }
     setLoading(false);
   }, []);
 
   const login = async (accessToken, refreshToken, userInfo) => {
-    if (!accessToken || !refreshToken || !userInfo || 
-        accessToken === 'undefined' || refreshToken === 'undefined') {
-      throw new Error('Invalid authentication data received');
-    }
-    
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
     localStorage.setItem('userInfo', JSON.stringify(userInfo));
@@ -59,7 +39,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       const refreshToken = localStorage.getItem('refreshToken');
-      if (refreshToken && refreshToken !== 'undefined') {
+      if (refreshToken) {
         await axios.post(`${config.API_URL}/auth/logout/`, 
           { refresh: refreshToken },
           {
