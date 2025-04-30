@@ -1,6 +1,13 @@
 {
   "rewrites": [
-    { "source": "/**", "destination": "/index.html" }
+    { 
+      "source": "/api/**", 
+      "destination": "https://hindisetu-api.onrender.com/api/:splat" 
+    },
+    { 
+      "source": "/**", 
+      "destination": "/index.html" 
+    }
   ],
   "headers": [
     {

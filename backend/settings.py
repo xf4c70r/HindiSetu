@@ -174,14 +174,11 @@ SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'False') == 'True'
 CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE', 'False') == 'True'
 SECURE_PROXY_SSL_HEADER = None if DEBUG else ('HTTP_X_FORWARDED_PROTO', 'http')
-CORS_ALLOW_ALL_ORIGINS = True
-
-# CORS settings
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = False  # More secure
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # React frontend in development
-    "https://hindisetu.onrender.com",  # New frontend domain
+    "https://hindisetu.onrender.com",  # Production frontend
 ]
 CORS_ALLOW_METHODS = [
     'DELETE',
@@ -202,6 +199,9 @@ CORS_ALLOW_HEADERS = [
     'x-csrftoken',
     'x-requested-with',
 ]
+
+# Add CORS_EXPOSE_HEADERS if you need to expose any headers to the frontend
+CORS_EXPOSE_HEADERS = ['content-type', 'x-total-count']
 
 # Authentication settings
 AUTHENTICATION_BACKENDS = [
